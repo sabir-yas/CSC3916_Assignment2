@@ -15,6 +15,7 @@ const cors = require('cors');
 const authController = require('./auth');
 const authJwtController = require('./auth_jwt');
 const db = require('./db')();
+global.db = db;
 
 const app = express();
 

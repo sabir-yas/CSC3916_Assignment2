@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 var passport = require('passport');
 var JwtStrategy = require('passport-jwt').Strategy;
@@ -9,14 +8,14 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
 
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+    var user = db.find(jwt_payload.id);
 
-    // If token is valid and contains username, allow access
-    if (jwt_payload.username) {
-        return done(null, jwt_payload);
+    if (user) {
+        done(null, user);
     } else {
-        return done(null, false);
+        done(null, false);
     }
-
 }));
 
-exports.isAuthenticated = passport.authenticate('jwt', { session: false });
+exports.isAuthenticated = passport.authenticate('jwt', { session : false });
+exports.secret = opts.secretOrKey ;
